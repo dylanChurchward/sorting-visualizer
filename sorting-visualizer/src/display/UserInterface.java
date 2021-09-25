@@ -1,3 +1,4 @@
+package display;
 // Visually displays a set of integers being sorted by popular sorting algorithms in real time. 
 // Author: Dylan - last updated 9/17/21
 
@@ -14,6 +15,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,15 +23,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class DisplayMain extends JPanel {
+import misfits.NumberGenerator;
+import sorting.BubbleSort;
+import sorting.Sorter;
+
+public class UserInterface extends JPanel {
 
 	/**
 	 * The number of random integers generated to be sorted. 
 	 */
-	private static final int myIntCount = 100;
+	private static final int myIntCount = 368;
 
 	/**
 	 * Auto generated serialization for JPanels. 
@@ -127,6 +134,8 @@ public class DisplayMain extends JPanel {
 	
 	// Sorting algorithm classes. 
 	
+	private JLabel algorithmDisplay;
+	
 	/**
 	 * Reference to the currently selected sorting algorithm based on the JButtons. 
 	 */
@@ -141,7 +150,7 @@ public class DisplayMain extends JPanel {
 	/**
 	 * Private constructor for this class.
 	 */
-	public DisplayMain() {
+	public UserInterface() {
 		setup();
 	}
 
@@ -155,6 +164,7 @@ public class DisplayMain extends JPanel {
 		myNumberGenerator = new NumberGenerator();
 		myRandomInts = myNumberGenerator.getRandomArray(myIntCount);
 		myTimer = new Timer(0, new Sort());
+		algorithmDisplay = new JLabel("Choose an Algorithm");
 		
 		// Instantiate sorting algorithm objects. 
 		myBubbleSort = new BubbleSort();
@@ -177,6 +187,11 @@ public class DisplayMain extends JPanel {
 		myMasterButtonPanel.add(myRightButtonPanel, BorderLayout.EAST);
 		this.add(myMasterButtonPanel, BorderLayout.SOUTH);
 		
+		// Setup displayAlgorithm JLabel. 
+		algorithmDisplay.setForeground(Color.yellow);
+		algorithmDisplay.setFont(new Font("Verdana", Font.BOLD, 18));
+		myCenterButtonPanel.add(algorithmDisplay);
+
 		// Set background colors for all JPanels including this class.
 		myRightButtonPanel.setBackground(Color.black);
 		myCenterButtonPanel.setBackground(Color.black);
@@ -235,6 +250,7 @@ public class DisplayMain extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mySorter = mySortersMap.get("Bubble");
+			algorithmDisplay.setText("Bubble Sort");
 			reset();
 		}
 	}
@@ -243,6 +259,7 @@ public class DisplayMain extends JPanel {
 	private class MergeSortListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			algorithmDisplay.setText("Merge Sort");
 
 		}
 	}
@@ -251,6 +268,7 @@ public class DisplayMain extends JPanel {
 	private class HeapSortListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			algorithmDisplay.setText("Heap Sort");
 
 		}
 	}
@@ -259,6 +277,7 @@ public class DisplayMain extends JPanel {
 	private class QuickSortListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			algorithmDisplay.setText("Quick Sort");
 
 		}
 	}
@@ -267,6 +286,7 @@ public class DisplayMain extends JPanel {
 	private class RadixSortListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			algorithmDisplay.setText("Radix Sort");
 
 		}
 	}
@@ -275,14 +295,11 @@ public class DisplayMain extends JPanel {
 	private class RandomizeListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			myRandomInts = myNumberGenerator.getRandomArray(myIntCount);
-			//myPointer = 0;
-			mySorter.reset();
-			repaint();
+			randomize();
 		}
 	}
 
-	// Delete this after setting up BubbleSort button action listener TODO!!!.
+	// 
 	private class Sort implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -290,7 +307,7 @@ public class DisplayMain extends JPanel {
 			myPointer = mySorter.getPointer();
 			repaint();
 			if (myPointer == -1) {
-				myTimer.stop();
+				reset();
 			}
 		}
 	}
@@ -298,7 +315,7 @@ public class DisplayMain extends JPanel {
 	/**
 	 * Stops myTimer if running. Enables myStartButton & changes the text to "Start" if necessary. 
 	 */
-	public void reset() {
+	private void reset() {
 		if (myTimer.isRunning()) {
 			myTimer.stop();
 		}
@@ -308,6 +325,17 @@ public class DisplayMain extends JPanel {
 		if (!myStartButton.isEnabled()) {
 			myStartButton.setEnabled(true);
 		}
+	}
+	
+	/**
+	 * Get a new set of random integers to sort. Reset current sort to base state. 
+	 */
+	private void randomize() {
+		myRandomInts = myNumberGenerator.getRandomArray(myIntCount);
+		if (mySorter != null) {
+			mySorter.reset();
+		}
+		repaint();
 	}
 	
 	@Override

@@ -1,3 +1,5 @@
+package sorting;
+
 /** 
  * Sorts an array of integers into ascending value. Has the ability to track and report the pointer index while sorting. 
  * @author Dylan

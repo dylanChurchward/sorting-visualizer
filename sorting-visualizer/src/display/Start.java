@@ -1,14 +1,15 @@
+package display;
 import javax.swing.JFrame;
 
-public class MainFrame extends JFrame {
+public class Start extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private MainFrame() {
-		DisplayMain dm = new DisplayMain();
+	private Start() {
+		UserInterface dm = new UserInterface();
 		this.setTitle("Sorting Algorithm Visualizer");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setExtendedState(MAXIMIZED_BOTH);
@@ -17,7 +18,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		final MainFrame mf = new MainFrame();
+		final Start mf = new Start();
 	}
 	
 }
